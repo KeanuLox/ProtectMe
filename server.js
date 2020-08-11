@@ -10,14 +10,18 @@ var masterKey = "1337a1337";
 //apiKey Map
 var apiKeys = new Map();
 
-fs.readFileSync('./apiKeys.txt').toString().split('\n').forEach(_raw => {
-    var _apiKey = _raw.split(',')[0];
-    var _source = _raw.split(',')[1];
-
-    console.log('apiKey found: ' + _apiKey);
-    apiKeys.set(_source,_apiKey);
-    console.log('apiKey registered: ' + _apiKey);
-});
+setInterval(() => {
+    fs.readFileSync('./apiKeys.txt').toString().split('\n').forEach(_raw => {
+        var _apiKey = _raw.split(',')[0];
+        var _source = _raw.split(',')[1];
+    
+        if(apiKeys.get(_source) == undefined) {
+            console.log('new apiKey found: ' + _apiKey);
+            apiKeys.set(_source,_apiKey);
+            console.log('new apiKey registered: ' + _apiKey);
+        }
+    });
+},2000);
 
 
 app.get('/createAPIKey',(req,res) => {
