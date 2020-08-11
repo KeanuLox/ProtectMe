@@ -1,12 +1,23 @@
+//imports
 var http = require('http');
 
+
+//used APIKey in plaintext
+var apiKey = "a1337";
+
+
+//base64 go brrr
+apiKey = new Buffer(apiKey).toString('base64');
+
+
+//request options
 var opt = {
     host: "localhost",
     port: "5566",
-    path: "/getSource?source=ping&api=a1337"
+    path: `/getSource?source=ping&api=${apiKey}`
 }
 
-
+//http request
 callback = function(response) {
     var str = '';
   
