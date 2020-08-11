@@ -4,11 +4,41 @@ var url = require('url');
 var fs = require('fs');
 
 
+//masterKey for APIKey generation
+var masterKey = "1337a1337";
+
 //apiKey Map
 var apiKeys = new Map();
 
-apiKeys.set('ping','a1337');
+fs.readFileSync('./apiKeys.txt').toString().split('\n').forEach(_raw => {
+    var _apiKey = _raw.split(',')[0];
+    var _source = _raw.split(',')[1];
 
+    console.log('apiKey found: ' + _apiKey);
+    apiKeys.set(_source,_apiKey);
+    console.log('apiKey registered: ' + _apiKey);
+});
+
+
+app.get('/createAPIKey',(req,res) => {
+    //queries
+    var _masterKey = new Buffer(url.parse(req.url,true).query.mkey);
+    var _apiKey = new Buffer(url.parse(req.url,true).query.api,'base64').toString('ascii');
+    var _source = url.parse(req.url,true).query.source;
+
+    //ask if queries exists
+    if(_apiKey != undefined && _source != undefined) {
+        //ask if the original masterkey and the sended one are the same
+        if(_masterKey == masterKey) {
+            fs.writeFileSync('./apiKeys.txt',`${fs.readFileSync('./apiKeys.txt')}\n_${_apiKey},${_source}`);
+            apiKeys.set(_source,_apiKey);
+            res.send('apiKey created.');
+        } else {
+            //error message
+            res.send('wrong masterkey.');
+        }
+    }
+})
 
 //getSource Route
 app.get('/getSource',(req,res) => {
