@@ -1,1 +1,1 @@
-console.log('pong');
+console.log('pong.');

@@ -2,8 +2,9 @@
 var http = require('http');
 
 
-//used APIKey in plaintext
+//config
 var apiKey = "a1337";
+var source = "ping"
 
 
 //base64 go brrr
@@ -15,7 +16,7 @@ var updateNotify = false;
 var opt = {
     host: "localhost",
     port: "5566",
-    path: `/getSource?source=ping&api=${apiKey}`
+    path: `/getSource?source=${source}&api=${apiKey}`
 }
 
 //http request
